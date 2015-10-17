@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Cashmachine</title>
+  <script type='text/javascript' src='jquery.js'></script>
+</head>
+ 
+<body style='background:#666;'>
+ 
+  <form style='width:300px;margin:auto;border:3px solid #eeee00;text-align:center;margin-top:200px;border-radius:10px;padding:20px;background:#ddd;'>
+	Cash: <output id='outpCash' name='outpCash' onclick=resetLocalStorage(); style='font-size:1.5em'></output><br><br>
+	Cash per Hour: <output id='outpCashph' name='outpCashph'></output><br><br>
+	Cashmachine Level: <output id='outpCashmachine' name='outpCashmachine'></output> <br><br>
+	next Level: <output id='outpNextLevelPrice' name='outpNextLevelPrice'></output> <br><br>
+	<input type='button' id='upgrader' name='upgrader' value='upgrade the Cashmachine' onclick=upgradeCashmachine(); >
+  </form>
+ 
+  <script>
+	
+	var cash = 0;
+	var cashperhour = 5000;
+	var cashmachinelevel = 1;
+	var nextlevelprice = 10;
+	var refreshtime = 20; //ms
+	var multiplikator = 1.2;
+	
+    if(typeof(Storage) !== "undefined") {
+        // Code for localStorage/sessionStorage.
+        if (localStorage.cash) {
+            cash = parseInt(localStorage.cash);
+			cashperhour = localStorage.cashperhour;
+			cashmachinelevel = localStorage.cashmachinelevel;
+			nextlevelprice = localStorage.nextlevelprice;
+			
+			$('#outpCash').val(cash + ',-');
+			$('#outpCashph').val(cashperhour + ',-');
+			$('#outpCashmachine').val(cashmachinelevel);
+			$('#outpNextLevelPrice').val(nextlevelprice + ',-');
+			
+		}
+	} else {
+        // Sorry! No Web Storage support..
+    }
+	
+	var cashperrefresh = cashperhour / 60 / 60 / 1000 * refreshtime;
+	
+
+    function upgradeCashmachine() {
+		
+	  if (cash >= nextlevelprice) {
+		
+		cash = cash - nextlevelprice;
+		nextlevelprice = parseInt(nextlevelprice * multiplikator);
+		cashperhour = parseInt(cashperhour * multiplikator);
+		cashmachinelevel = parseInt(cashmachinelevel) + 1;
+		
+		$('#outpCashph').val(cashperhour + ',-');
+		$('#outpCashmachine').val(cashmachinelevel);
+		$('#outpNextLevelPrice').val(nextlevelprice + ',-');
+		
+		localStorage.cashmachinelevel = cashmachinelevel;
+		localStorage.cashperhour = cashperhour;
+		localStorage.nextlevelprice = nextlevelprice;
+		localStorage.cash = Math.round(cash);
+		
+		cashperrefresh = cashperhour / 60 / 60 / 1000 * refreshtime;
+		
+		clearInterval(interval);
+		interval = setInterval(getRich, refreshtime);
+		
+	  }
+    }
+
+	var getRich = function(){
+		clearInterval(interval);
+		cash = cash + cashperrefresh;
+				
+		$('#outpCash').val(Math.round(cash) + ',-');
+		
+		localStorage.cash = Math.round(cash);
+		localStorage.cashperhour = cashperhour;
+		localStorage.cashmachinelevel = cashmachinelevel;
+		localStorage.nextlevelprice = nextlevelprice;
+		interval = setInterval(getRich, refreshtime);
+    }
+    var interval = setInterval(getRich, refreshtime);
+           
+    
+	
+	
+	function resetLocalStorage() {
+		
+		clearInterval(interval);
+		
+		localStorage.cashmachinelevel = 1;
+		localStorage.cashperhour = 5000;
+		localStorage.nextlevelprice = 10;
+		localStorage.cash = 0;
+		
+	}
+           
+           
+  </script>
+ 
+ 
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>HTML5 Testseite</title>
+  <script type='text/javascript' src='jquery.js'></script>
+</head>
+ 
+<body>
+ 
+  <form oninput="calculate();">
+ 
+    <input id='range_time' type='range' max=1000 min=10 step=10 value=500>
+    <output id='o1' name='o1' for='range_time'>500</output> ms
+    <br>
+    <input id='range_money' type='range' max=1000 step=1 value=1 style="width:500px">
+    <output id='o2' name='o2' for='range_time'>1</output>,-
+            <br><br>
+            <output id='o3' name='o3' for='range_time range_money'>0</output>,-
+  </form>
+ 
+  <script>
+ 
+    if(typeof(Storage) !== "undefined") {
+                        // Code for localStorage/sessionStorage.
+                        if (localStorage.money) {
+                                   $('#o3').val(localStorage.getItem("money"));
+                        }
+            } else {
+                        // Sorry! No Web Storage support..
+            }
+ 
+  
+            var time = parseInt($('#range_time').val());
+            var money = parseInt($('#range_money').val());
+            var sum = 0;
+                       
+           
+    function calculate() {
+              time = parseInt($('#range_time').val());
+              money = parseInt($('#range_money').val());
+             
+              $('#o1').val(time);
+              $('#o2').val(money);
+             
+              clearInterval(interval);
+      interval = setInterval(getRich, time);
+            }
+           
+            var getRich = function(){
+      clearInterval(interval);
+              sum = parseInt($('#o3').val()) + money;
+      $('#o3').val(sum);
+              localStorage.money = sum;
+      interval = setInterval(getRich, time);
+    }
+    var interval = setInterval(getRich, time);
+           
+           
+           
+           
+  </script>
+ 
+ 
+</body>
+</html>

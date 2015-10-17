@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Hopfen, Bier und Geld</title>
+	<link href="style.css" type="text/css" rel="stylesheet">
+	<script type='text/javascript' src='jquery.js'></script>
+</head>
+ 
+<body style='background:#334;'>
+ 
+	<form id='formValues'>
+		<output id='outpCash' name='outpCash'></output>
+		<output id='outpBier' name='outpBier'></output>
+		<output id='outpHopfen' name='outpHopfen'></output>
+		<output id='outpPolice' name='outpPolice'></output>
+		<output id='outpHopfenquality' name='outpHopfenquality'></output>
+		<output id='outpBierquality' name='outpBierquality'></output>
+		<div class='clear'></div>
+	</form>
+	
+	<div id='faktoren'>
+	
+		<div class='faktor_name'>Cash</div>
+		<div class='faktor_value' id='faktor_value_cash'></div>
+		
+		<div class='faktor_name'>Hopfen</div>
+		<div class='faktor_value' id='faktor_value_hopfen'></div>
+		
+		<div class='faktor_name'>Bier</div>
+		<div class='faktor_value' id='faktor_value_bier'></div>
+		
+		<div class='faktor_name'>Hopfen Qualität</div>
+		<div class='faktor_value' id='faktor_value_hopfenquality'></div>
+		
+		<div class='faktor_name'>Bier Qualität</div>
+		<div class='faktor_value' id='faktor_value_bierquality'></div>
+		
+		<div class='faktor_name'>Polizei Motivation</div>
+		<div class='faktor_value' id='faktor_value_policemotivation'></div>
+		
+		<div class='faktor_name'>Hopfen per second</div>
+		<div class='faktor_value' id='faktor_value_hopfenpersec'></div>
+		
+		<div class='faktor_name'>Bier per second</div>
+		<div class='faktor_value' id='faktor_value_bierpersec'></div>
+		
+		<div class='faktor_name'>Sell per second</div>
+		<div class='faktor_value' id='faktor_value_sellpersec'></div>
+		
+		<div class='faktor_name'>Bier per Hopfen</div>
+		<div class='faktor_value' id='faktor_value_bierperhopfen'></div>
+		
+		<div class='faktor_name'>Cash per second</div>
+		<div class='faktor_value' id='faktor_value_cashpersec'></div>
+		
+		<div class='faktor_name'>Bierdealer</div>
+		<div class='faktor_value' id='faktor_value_bierdealer'></div>
+		
+		<div class='clear'></div>
+		
+	</div>
+	
+	
+	<div class='place' id='p1'>
+
+		<div class='buyable notavailable' id='b1'>
+			<div class='name'>Hopfenproducer</div>	
+			<div class='descr'>0.1 per sec</div>
+			<div class='level'>1</div>
+			<div class='price'>1.000,-</div>
+			<div class='buy' onclick=buy(1,2,1000)>UPGRADE</div>
+			<div class='clear'></div>
+		</div>
+	
+		<div class='buyable notavailable' id='b2'>
+			<div class='name'>Bierproducer</div>	
+			<div class='descr'>0.5 per sec</div>
+			<div class='level'>0</div>
+			<div class='price'>1.000,-</div>
+			<div class='buy' onclick=buy(2,1,1000)>BUY</div>
+			<div class='clear'></div>
+		</div>
+		
+		<div class='buyable notavailable' id='b3'>
+			<div class='name'>reset Kopfgeld</div>	
+			<div class='descr'>x</div>
+			<div class='level'>-</div>
+			<div class='price'>20.000,-</div>
+			<div class='buy' onclick=buy(3,1,20000)>BUY</div>
+			<div class='clear'></div>
+		</div>
+	
+		<div class='buyable notavailable' id='b4'>
+			<div class='name'>Hopfenquality++</div>	
+			<div class='descr'>-</div>
+			<div class='level'>0</div>
+			<div class='price'>500,-</div>
+			<div class='buy' onclick=buy(4,1,500)>BUY</div>
+			<div class='clear'></div>
+		</div>
+	
+		<div class='buyable notavailable' id='b5'>
+			<div class='name'>Bierquality++</div>	
+			<div class='descr'>-</div>
+			<div class='level'>0</div>
+			<div class='price'>500,-</div>
+			<div class='buy' onclick=buy(5,1,500)>BUY</div>
+			<div class='clear'></div>
+		</div>
+	
+		<div class='buyable' id='b6'>
+			<div class='name'>Bierdealer</div>	
+			<div class='descr'>Sells your Stuff</div>
+			<div class='level'>0</div>
+			<div class='price'>5,-</div>
+			<div class='buy' onclick=buy(6,1,5)>BUY</div>
+			<div class='clear'></div>
+		</div>
+	
+		<div class='buyable' id='b7'>
+			<div class='name'>Hopfen</div>	
+			<div class='descr'>1</div>
+			<div class='level'>-</div>
+			<div class='price'>1,-</div>
+			<div class='buy' onclick=buy(7,1,1)>BUY</div>
+			<div class='clear'></div>
+		</div>
+		
+		<br><br>
+		<div onclick=handbrew(); style='background:#77a;width:100px;text-align:center;cursor:pointer;'>handbrew</div>
+		<br>
+		<div onclick=sellbeer(); style='background:#77a;width:100px;text-align:center;cursor:pointer;'>sell beer</div>
+		<br>
+		<div onclick=resetGame(); style='background:#a77;width:100px;text-align:center;cursor:pointer;'>reset game</div>
+		
+	</div>
+	<p>working: http://saxn.org/bbb/hopfenbiergeld.html</p>
+	<p>not working: http://bbb.saxn.org/hopfenbiergeld.html</p>
+	<p>why?</p>
+	
+	
+  <script>
+  
+	var hopfen = 0;
+	var bier = 0;
+	var cash = 5;
+	
+	var cashpersec = 0;
+	var bierquality = 0;
+	var hopfenquality = 0;
+	var bierprice = 1;
+	var bierperhopfen = 2;
+	
+	var hopfenpersec = 0.1;
+	var bierpersec = 0;
+	var sellpersec = 0;
+	
+	var policemotivation = 0;
+	var bierdealer = 0;
+	
+	var intervaltime = 100; //ms
+	
+	
+	
+	if(typeof(Storage) !== "undefined") {
+        // Code for localStorage/sessionStorage.
+        if (localStorage.cash) {
+			cash = parseInt(localStorage.cash);		
+		}
+		if (localStorage.bier) {
+			bier = parseInt(localStorage.bier);		
+		}
+		if (localStorage.hopfen) {
+			hopfen = parseInt(localStorage.hopfen);			
+		}
+		if (localStorage.bierdealer) {
+			bierdealer = parseInt(localStorage.bierdealer);			
+		}
+		if (localStorage.bierprice) {
+			bierprice = parseInt(localStorage.bierprice);			
+		}
+		if (localStorage.bierperhopfen) {
+			bierperhopfen = parseInt(localStorage.bierperhopfen);			
+		}
+		if (localStorage.hopfenpersec) {
+			hopfenpersec = parseInt(localStorage.hopfenpersec);			
+		}
+		if (localStorage.bierpersec) {
+			bierpersec = parseInt(localStorage.bierpersec);			
+		}
+		if (localStorage.sellpersec) {
+			sellpersec = parseInt(localStorage.sellpersec);			
+		}
+		
+		
+	} else {
+        // Sorry! No Web Storage support..
+    }
+	
+	
+	
+	
+	
+	function buy(buyable, level, price) {
+	
+		if ((buyable == 7) && (price <= cash)) {
+			clearInterval(interval);
+			hopfen = hopfen + 1;
+			cash = cash - price;
+			ausgeben();
+		}
+		
+		if ((buyable == 6) && (price <= cash)) {
+			clearInterval(interval);
+			$('#b'+buyable+' .level').html(level);
+			sellpersec = sellpersec + 0.1;
+			bierdealer = bierdealer + 1;
+			cash = cash - price;
+			ausgeben();
+		}
+		
+		
+	}
+	
+	
+	function handbrew() {
+		if (hopfen >= 1) {
+			hopfen = hopfen - 1;
+			bier = bier + bierperhopfen;
+			clearInterval(interval);
+			ausgeben();
+		}
+	}
+	
+	
+	function sellbeer() {
+		if (bier >= 1) {
+			bier = bier - 1;
+			cash = cash + bierprice;
+			clearInterval(interval);
+			ausgeben();
+		}
+	}
+	
+		
+	
+	var ausgeben = function(){
+	
+		clearInterval(interval);
+		
+		hopfenperinterval = (hopfenpersec / 1000) * intervaltime;
+		bierperinterval = bierpersec / 1000 * intervaltime;
+		sellperinterval = sellpersec / 1000 * intervaltime;
+		
+		cashpersec = sellpersec * bierprice;
+		
+		hopfen = hopfen + hopfenperinterval;
+		
+		if (hopfen => (bierperinterval * bierperhopfen)) {
+			bier = bier + bierperinterval;
+			hopfen = hopfen - (bierperinterval * bierperhopfen);
+		}
+		if (bier => sellperinterval) {
+			bier = bier - sellperinterval;
+			cash = cash + (sellperinterval * bierprice);
+		}
+		
+		$('#outpCash').val(Math.floor(cash) + ',-');
+		$('#outpBier').val(Math.floor(bier));
+		$('#outpHopfen').val(Math.floor(hopfen));
+		
+		$('#faktor_value_cashpersec').html(cashpersec);
+		$('#faktor_value_bierpersec').html(bierpersec);
+		$('#faktor_value_hopfenpersec').html(hopfenpersec);
+		$('#faktor_value_cash').html(Math.round(cash*10)/10);
+		$('#faktor_value_bier').html(Math.round(bier*10)/10);
+		$('#faktor_value_hopfen').html(Math.round(hopfen*10)/10);
+		$('#faktor_value_bierquality').html(bierquality);
+		$('#faktor_value_hopfenquality').html(hopfenquality);
+		$('#faktor_value_policemotivation').html(policemotivation);
+		$('#faktor_value_bierperhopfen').html(bierperhopfen);
+		$('#faktor_value_bierpersec').html(bierpersec);
+		$('#faktor_value_sellpersec').html(Math.round(sellpersec*10)/10);
+		$('#faktor_value_bierdealer').html(bierdealer);
+		
+		localStorage.cash = parseInt(cash);
+		localStorage.bier = parseInt(bier);
+		localStorage.hopfen = parseInt(hopfen);
+		localStorage.bierdealer = parseInt(bierdealer);
+		localStorage.bierprice = parseInt(bierprice);
+		localStorage.bierperhopfen = parseInt(bierperhopfen);
+		localStorage.hopfenpersec = parseInt(hopfenpersec);
+		localStorage.bierpersec = parseInt(bierpersec);
+		localStorage.sellpersec = parseInt(sellpersec);
+		
+		
+		
+		
+		interval = setInterval(ausgeben, intervaltime);
+		
+    }
+	
+    var interval = setInterval(ausgeben, intervaltime);
+	
+	
+
+	function resetGame() {
+	
+		clearInterval(interval);
+		
+		localStorage.clear();
+		
+		hopfen = 0;
+		bier = 0;
+		cash = 5;
+		
+		bierprice = 1;
+		bierperhopfen = 2;
+		
+		hopfenpersec = 0.1;
+		bierpersec = 0;
+		sellpersec = 0;
+		
+		bierdealer = 0;	
+		
+		ausgeben();
+		
+	}
+	
+           
+  </script>
+ 
+ 
+</body>
+</html>

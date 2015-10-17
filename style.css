@@ -1,0 +1,119 @@
+
+body {
+	font-family:arial;
+	font-size:100.01%;
+	-webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.clear {
+	clear:both !important;
+	display:block;
+	width:1px;
+}
+
+#formValues {
+	font-size:1.2em;
+	color:#fff;
+	margin-bottom:20px;
+	height:30px;
+}
+
+#formValues output {
+	display:block;
+	float:left;
+	text-align:right;
+	margin-right:140px;
+	background-repeat: no-repeat;
+	background-position: 0px 4px;
+}
+
+#outpCash {
+	background-image: url("icons/x16/currency_euro.png");
+	width:120px;
+}
+#outpBier {
+	background-image: url("icons/x16/drink_yellow.png");
+	width:120px;
+}
+#outpHopfen {
+	background-image: url("icons/x16/cubes_green.png");
+	width:120px;
+}
+#outpPolice {
+	background-image: url("icons/x16/policeman_german.png");
+	width:50px;
+	margin-left:50px;
+}
+#outpBierquality {
+	width:50px;
+	background-image: url("icons/x16/drink_yellow.png");
+}
+#outpHopfenquality {
+	width:50px;
+	background-image: url("icons/x16/cubes_green.png");
+}
+
+.buyable {
+	margin-bottom:1px;
+	background:#ccd;
+	width:732px;
+	font-size:0.9em;
+	overflow:auto;
+}
+
+.buyable div {
+	float:left;
+}
+
+.buyable .name {
+	width:200px;
+	font-weight:bold;
+}
+.buyable .descr {
+	width:300px;
+}
+.buyable .level {
+	width:40px;
+	text-align:right;
+}
+.buyable .price {
+	width:80px;
+	text-align:right;
+}
+.buyable .buy {
+	width:92px;
+	margin-left:20px;
+	background:#77a;
+	text-align:center;
+	cursor:pointer;
+	color:#fff;
+}
+.buyable .buy:hover {
+	background:#444;
+	color:#ff0;
+}
+
+.notavailable {
+	color:red !important;
+}
+
+
+#faktoren   {
+	width:280px;
+	margin:50px;
+	color:#eee;
+	font-size:0.8em;
+}
+
+.faktor_name {
+	float:left;
+	width:180px;
+}
+.faktor_value {
+	float:left;
+	width:80px;
+	text-align:right;
+}

@@ -1,0 +1,43 @@
+
+body {
+	font-family:arial;
+	font-size:100.01%;
+	-webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+	background:#444;
+}
+
+.clear {
+	clear:both !important;
+	height:0px;
+}
+
+#temp {
+	border:1px solid #000;
+	background:#eee;
+	width:750px;
+	border-radius:5px;
+	padding:20px;
+	font-size:0.9em;
+}
+
+h2 {
+	margin:0px;
+	margin-bottom:20px;
+}
+
+.buyable {
+	margin-bottom:1px;
+	background:#ccd;
+	width:732px;
+	font-size:0.9em;
+	overflow:auto;
+	cursor:pointer;
+}
+
+.buyable:hover {
+	background:#ff0;
+	color:#000;
+}

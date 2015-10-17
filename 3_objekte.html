@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Objekte</title>
+	<link href="style_objects.css" type="text/css" rel="stylesheet">
+	<script type='text/javascript' src='jquery.js'></script>
+</head>
+ 
+<body>
+ 	
+	<div id='temp'>
+		<h2>this is a div named temp</h2>
+		<p id='tempvalues'></p>
+	</div>
+	
+ 
+  <script>
+  
+	
+	var intervaltime = 300; //ms - wie schnell da timer läuft
+	
+		
+	
+	// objekte onload mit php aus da db erzeugen
+	
+	var places = [
+		{
+			id: 0,
+			name: "Platzhalter"
+		},
+		{
+			id: 1,
+			name: "Keller",
+			descr: "Dein Keller - ein perfekter Ort um Bier zu brauen"
+		},
+		{
+			id: 2,
+			name: "Markt",
+			descr: "buy and sell stuff"
+		},
+		{
+			id: 3,
+			name: "Immobilienmakler",
+			descr: "buy and sell immos - hopfenfelder, lagerhallen, fabrikgelände"
+		}
+	]
+	
+	
+	var faktoren = [
+		{
+			id: 0,
+			name: "Platzhalter",
+			value: 0,
+			show: false,
+			variable: 'platzhalter'
+		},
+		{
+			id: 1,
+			name: "Cash per Second",
+			value: 0,
+			show: false,
+			variable: 'cashpersec'
+		},
+		{
+			id: 2,
+			name: "Bier per Second",
+			value: 0,
+			show: false,
+			variable: 'bierpersec'
+		},
+		{
+			id: 3,
+			name: "Hopfen per Second",
+			value: 0,
+			show: false,
+			variable: 'hopfenpersec'
+		},
+		{
+			id: 4,
+			name: "Bier per Hopfen",
+			value: 0.5,
+			show: false,
+			variable: 'bierperhopfen'
+		},
+		{
+			id: 5,
+			name: "Bier",
+			value: 0,
+			show: true,
+			variable: 'bier'
+		},
+		{
+			id: 6,
+			name: "Hopfen",
+			value: 0,
+			show: true,
+			variable: 'hopfen'
+		},
+		{
+			id: 7,
+			name: "Cash",
+			value: 10000,
+			show: true,
+			variable: 'cash'
+		},
+		{
+			id: 8,
+			name: "Sell per Second",
+			value: 0,
+			show: false,
+			variable: 'sellpersec'
+		},
+		{
+			id: 9,
+			name: "Cash per Bier",
+			value: 1,
+			show: false,
+			variable: 'cashperbier'
+		},
+		{
+			id: 10,
+			name: "Lagerkapazität",
+			value: 0,
+			show: false,
+			variable: 'lagerkap'
+		}
+	]
+	
+		
+	var buyables = [
+		{
+			id: 0,
+			name: "Platzhalter"
+		},
+		{ 
+			id: 1,
+			name: "schutzgeld",
+			level: 1,
+			price: 100,
+			multiplikator: 1.2,
+			faktoren: [
+				1
+			],
+			changes: [
+				20
+			],
+			effekte: function() {
+			
+				for (i=0; i < this.faktoren.length ; i++ ) { 
+
+					change = Math.floor(this.changes[i] * this.multiplikator);
+					faktoren[this.faktoren[i]].value = (faktoren[this.faktoren[i]].value + this.changes[i]);
+					window[faktoren[this.faktoren[i]].variable] = faktoren[this.faktoren[i]].value;
+					this.changes[i] = change;
+					
+				}
+			},
+			
+			createme: function() {
+			
+				$("#b"+this.id).remove();
+				
+				var faktoren_str = "";
+				var priceformatiert = tausendertrenner(this.price);
+				var level = this.level;
+				
+				var div = document.createElement('div');
+				div.className = "buyable";
+				div.id = "b"+this.id;
+				
+				for (i=0; i < this.faktoren.length ; i++ ) { 
+					faktoren_str += this.changes[i] + " " + faktoren[this.faktoren[i]].name + " . . "; 
+				}
+				
+				div.innerHTML = "€ "+priceformatiert + " Level: " + level + " - " + faktoren_str;
+				div.onclick = function() {
+					buy(1); //this.id funktioniert nit, weil this in dem fall da div is.. hmm. eh egal weil dynamisch per php erzeugt?
+				}
+				
+				document.getElementById('temp').appendChild(div);
+			}
+		},
+		{ 
+			id: 2,
+			name: "kleines Brauset",
+			level: 1,
+			price: 200,
+			multiplikator: 1.1,
+			faktoren: [
+				8,3,2
+			],
+			changes: [
+				1,20,5
+			],
+			effekte: function() { //wird durch buy-funktion ausgeführt
+			
+				for (i=0; i < this.faktoren.length ; i++ ) { 
+				
+					change = Math.floor(this.changes[i] * this.multiplikator);
+					faktoren[this.faktoren[i]].value = (faktoren[this.faktoren[i]].value + this.changes[i]);
+					window[faktoren[this.faktoren[i]].variable] = faktoren[this.faktoren[i]].value;
+					this.changes[i] = change; 
+					
+				}
+			},
+			
+			createme: function() { 
+			
+				$("#b"+this.id).remove();
+				
+				var faktoren_str = "";
+				var priceformatiert = tausendertrenner(this.price);
+				var level = this.level;
+				
+				var div = document.createElement('div');
+				div.className = "buyable";
+				div.id = "b"+this.id;
+				
+				for (i=0; i < this.faktoren.length ; i++ ) { 
+					faktoren_str += this.changes[i] + " " + faktoren[this.faktoren[i]].name + " . . "; 
+				}
+				
+				div.innerHTML = "€ "+priceformatiert + " Level: " + level + " - " + faktoren_str;
+				div.onclick = function() {
+					buy(2); //this.id funktioniert nit, weil this in dem fall da div is.. hmm. eh egal weil dynamisch per php erzeugt?
+				}
+				
+				document.getElementById('temp').appendChild(div);
+			}
+		},
+		{ 
+			id: 3,
+			name: "biermaschine",
+			level: 1,
+			price: 300,
+			multiplikator: 3.2,
+			faktoren: [
+				2
+			],
+			changes: [
+				22
+			],
+			effekte: function() {
+			
+				for (i=0; i < this.faktoren.length ; i++ ) { 
+
+					change = Math.floor(this.changes[i] * this.multiplikator);
+					faktoren[this.faktoren[i]].value = (faktoren[this.faktoren[i]].value + this.changes[i]);
+					window[faktoren[this.faktoren[i]].variable] = faktoren[this.faktoren[i]].value;
+					this.changes[i] = change;
+					
+				}
+			},
+			
+			createme: function() {
+			
+				$("#b"+this.id).remove();
+				
+				var faktoren_str = "";
+				var priceformatiert = tausendertrenner(this.price);
+				var level = this.level;
+				
+				var div = document.createElement('div');
+				div.className = "buyable";
+				div.id = "b"+this.id;
+				
+				for (i=0; i < this.faktoren.length ; i++ ) { 
+					faktoren_str += this.changes[i] + " " + faktoren[this.faktoren[i]].name + " . . "; 
+				}
+				
+				div.innerHTML = "€ "+priceformatiert + " Level: " + level + " - " + faktoren_str;
+				div.onclick = function() {
+					buy(3); //this.id funktioniert nit, weil this in dem fall da div is.. hmm. eh egal weil dynamisch per php erzeugt?
+				}
+				
+				document.getElementById('temp').appendChild(div);
+			}
+		},
+		{ 
+			id: 4,
+			name: "dealer",
+			level: 1,
+			price: 50,
+			multiplikator: 1,
+			faktoren: [
+				8
+			],
+			changes: [
+				1
+			],
+			effekte: function() {
+			
+				for (i=0; i < this.faktoren.length ; i++ ) { 
+
+					change = Math.floor(this.changes[i] * this.multiplikator);
+					faktoren[this.faktoren[i]].value = (faktoren[this.faktoren[i]].value + this.changes[i]);
+					window[faktoren[this.faktoren[i]].variable] = faktoren[this.faktoren[i]].value;
+					this.changes[i] = change;
+					
+				}
+			},
+			
+			createme: function() {
+			
+				$("#b"+this.id).remove();
+				
+				var faktoren_str = "";
+				var priceformatiert = tausendertrenner(this.price);
+				var level = this.level;
+				
+				var div = document.createElement('div');
+				div.className = "buyable";
+				div.id = "b"+this.id;
+				
+				for (i=0; i < this.faktoren.length ; i++ ) { 
+					faktoren_str += this.changes[i] + " " + faktoren[this.faktoren[i]].name + " . . "; 
+				}
+				
+				div.innerHTML = "€ "+priceformatiert + " Level: " + level + " - " + faktoren_str;
+				div.onclick = function() {
+					buy(4); //this.id funktioniert nit, weil this in dem fall da div is.. hmm. eh egal weil dynamisch per php erzeugt?
+				}
+				
+				document.getElementById('temp').appendChild(div);
+			}
+		},
+		{ 
+			id: 5,
+			name: "hopfenfeld",
+			level: 1,
+			price: 500,
+			multiplikator: 1,
+			faktoren: [
+				3
+			],
+			changes: [
+				100
+			],
+			effekte: function() {
+			
+				for (i=0; i < this.faktoren.length ; i++ ) { 
+
+					change = Math.floor(this.changes[i] * this.multiplikator);
+					faktoren[this.faktoren[i]].value = (faktoren[this.faktoren[i]].value + this.changes[i]);
+					window[faktoren[this.faktoren[i]].variable] = faktoren[this.faktoren[i]].value;
+					this.changes[i] = change;
+					
+				}
+			},
+			
+			createme: function() {
+			
+				$("#b"+this.id).remove();
+				
+				var faktoren_str = "";
+				var priceformatiert = tausendertrenner(this.price);
+				var level = this.level;
+				
+				var div = document.createElement('div');
+				div.className = "buyable";
+				div.id = "b"+this.id;
+				
+				for (i=0; i < this.faktoren.length ; i++ ) { 
+					faktoren_str += this.changes[i] + " " + faktoren[this.faktoren[i]].name + " . . "; 
+				}
+				
+				div.innerHTML = "€ "+priceformatiert + " Level: " + level + " - " + faktoren_str;
+				div.onclick = function() {
+					buy(5); //this.id funktioniert nit, weil this in dem fall da div is.. hmm. eh egal weil dynamisch per php erzeugt?
+				}
+				
+				document.getElementById('temp').appendChild(div);
+			}
+		},
+		{ 
+			id: 6,
+			name: "10 dealer",
+			level: 1,
+			price: 500,
+			multiplikator: 1,
+			faktoren: [
+				8
+			],
+			changes: [
+				10
+			],
+			effekte: function() {
+			
+				for (i=0; i < this.faktoren.length ; i++ ) { 
+
+					change = Math.floor(this.changes[i] * this.multiplikator);
+					faktoren[this.faktoren[i]].value = (faktoren[this.faktoren[i]].value + this.changes[i]);
+					window[faktoren[this.faktoren[i]].variable] = faktoren[this.faktoren[i]].value;
+					this.changes[i] = change;
+					
+				}
+			},
+			
+			createme: function() {
+			
+				$("#b"+this.id).remove();
+				
+				var faktoren_str = "";
+				var priceformatiert = tausendertrenner(this.price);
+				var level = this.level;
+				
+				var div = document.createElement('div');
+				div.className = "buyable";
+				div.id = "b"+this.id;
+				
+				for (i=0; i < this.faktoren.length ; i++ ) { 
+					faktoren_str += this.changes[i] + " " + faktoren[this.faktoren[i]].name + " . . "; 
+				}
+				
+				div.innerHTML = "€ "+priceformatiert + " Level: " + level + " - " + faktoren_str;
+				div.onclick = function() {
+					buy(6); //this.id funktioniert nit, weil this in dem fall da div is.. hmm. eh egal weil dynamisch per php erzeugt?
+				}
+				
+				document.getElementById('temp').appendChild(div);
+			}
+		}
+		
+	]
+	
+	
+	
+	
+	// gibt a schöne zahl mit an neuner hinten dran zurück
+	function neunerzahl(price,multiplikator) {
+		
+		var pricenew = (Math.floor(price * multiplikator/10)*10)+9;
+		return pricenew;
+		
+	}
+	
+	
+	
+	// 100000 = 100.000
+	function tausendertrenner(number) { 
+		
+		number = '' + number; 
+		if (number.length > 3) { 
+			var mod = number.length % 3; 
+			var output = (mod > 0 ? (number.substring(0,mod)) : ''); 
+		
+			for (ti=0 ; ti < Math.floor(number.length / 3); ti++) { 
+				if ((mod == 0) && (ti == 0)) {
+					output += number.substring(mod+ 3 * ti, mod + 3 * ti + 3); 
+				} 
+				else  
+				output+= '.' + number.substring(mod + 3 * ti, mod + 3 * ti + 3); 
+			} 
+			return (output); 
+		} 
+		
+		else {
+			 return number; 
+		}
+		
+	}
+	
+	
+	// schreib in die variablen die werte aus die objekte
+	function getfaktoren() {
+	
+		for (i=0; i < faktoren.length ; i++ ) { 
+		
+			window[faktoren[i].variable] = faktoren[i].value;
+		}
+	}
+		
+	// schreib in die objekte die werte aus die variablen und erzeug glei die gerundeten ausgaben
+	function writefaktoren() {
+		
+		var x = '';
+		for (i=0; i < faktoren.length ; i++ ) { 
+			
+			if (faktoren[i].value > 9) {
+				var ausgabe_gerundet = Math.floor(faktoren[i].value);
+				var ausgabe_tausender = tausendertrenner(parseInt(ausgabe_gerundet)); 
+				x = x + faktoren[i].variable + " -- > " + ausgabe_tausender + '<br>';
+			}
+			else {
+				var ausgabe_deci = Math.floor(faktoren[i].value*10)/10;
+				var ausgabe_deci = ausgabe_deci.toFixed(1);
+				x = x + faktoren[i].variable + " -- > " + ausgabe_deci + '<br>';
+			}
+			
+			faktoren[i].value = window[faktoren[i].variable];
+		}
+		
+		$('#tempvalues').html(x);
+	}
+	
+	
+	
+	function buy(buyable_id) {
+		
+		clearInterval(interval);
+		getfaktoren();
+		
+		var price = buyables[buyable_id].price;
+		
+		if (cash >= price) {
+						
+			var level = buyables[buyable_id].level++;
+			var multiplikator = buyables[buyable_id].multiplikator;
+			cash = cash - price;		
+			
+			buyables[buyable_id].effekte();
+			
+			buyables[buyable_id].price = neunerzahl(price,multiplikator);
+			buyables[buyable_id].createme(); 
+			
+			writefaktoren();
+		}
+		
+		ausgeben();
+		
+	}
+		
+	
+	// timerfunktion
+	var ausgeben = function(){
+	
+		clearInterval(interval);
+		
+		getfaktoren();
+		
+		hopfenperinterval = (hopfenpersec / 1000) * intervaltime;
+		bierperinterval = bierpersec / 1000 * intervaltime;
+		sellperinterval = sellpersec / 1000 * intervaltime;
+		cashperinterval = cashpersec / 1000 * intervaltime;
+		
+		hopfen = hopfen + hopfenperinterval;
+		
+		
+		if (hopfen >= (bierperinterval / bierperhopfen)) {
+		
+			bier = bier + bierperinterval;
+			hopfen = hopfen - (bierperinterval / bierperhopfen);
+		}
+		else if ((hopfen > 0) && (hopfen < (bierperinterval / bierperhopfen))) {
+			
+			bier = bier + Math.round(hopfen * bierperhopfen);
+			hopfen = hopfen - hopfen;
+		}
+		
+		
+		if (bier >= sellperinterval) {
+			bier = bier - sellperinterval;
+			cash = cash + (sellperinterval * cashperbier);
+		}
+		else if ((bier > 0) && (bier < sellperinterval)) {
+			
+			cash = cash + (bier * cashperbier);
+			bier = bier - (bier);
+		}
+		
+		cash = cash + cashperinterval;
+		
+		
+		
+		writefaktoren();
+		
+		interval = setInterval(ausgeben, intervaltime);
+		
+    }
+	
+    var interval = setInterval(ausgeben, intervaltime);
+	
+	
+	
+	
+	/*alle buyables erzeugen
+	for (i=1; i < buyables.length ; i++ ) { 
+		buyables[i].createme();  // wieso zum teifl geht des nit????
+	}
+	*/
+	
+		buyables[1].createme(); 
+		buyables[2].createme(); 
+		buyables[3].createme(); 
+		buyables[4].createme(); 
+		buyables[5].createme(); 
+		buyables[6].createme(); 
+	
+           
+  </script>
+ 
+ 
+</body>
+</html>
