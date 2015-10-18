@@ -21,3 +21,85 @@ verbraucht: {
 				
 			
 	objekte im objekt.
+
+
+
+
+
+
+	function makebuyable() { 
+	
+		var id = 7;
+		var newBuyable = {
+			id: id,
+			name: "xxx",
+			level: 1,
+			price: 999999,
+			multiplikator: 99,
+			verbraucht: {
+				1:220,
+				8:40
+			},
+			change: {
+				1:20
+			},
+			faktoren: [
+				3,4,5,6,7
+			],
+			changes: [
+				100,200,300,400,500
+			],
+			effekte: function() {
+				
+				var obj = this.verbraucht;
+				Object.keys(obj).forEach(function(key) {
+					console.log(key, obj[key]);
+					
+				});
+				
+				var obj = this.change;
+				Object.keys(obj).forEach(function(key) {
+					console.log(key, obj[key]);
+					
+				});
+				
+				for (i=0; i < this.faktoren.length ; i++ ) { 
+
+					change = Math.floor(this.changes[i] * this.multiplikator);
+					faktoren[this.faktoren[i]].value = (faktoren[this.faktoren[i]].value + this.changes[i]);
+					window[faktoren[this.faktoren[i]].variable] = faktoren[this.faktoren[i]].value;
+					this.changes[i] = change;
+					
+				}
+			},
+			
+			createme: function() {
+			
+				$("#b"+this.id).remove();
+				
+				var faktoren_str = "";
+				var priceformatiert = tausendertrenner(this.price);
+				var level = this.level;
+				
+				var div = document.createElement('div');
+				div.className = "buyable";
+				div.id = "b"+this.id;
+				
+				for (i=0; i < this.faktoren.length ; i++ ) { 
+					faktoren_str += this.changes[i] + " " + faktoren[this.faktoren[i]].name + " . . "; 
+				}
+				
+				div.innerHTML = "€ "+priceformatiert + " Level: " + level + " - " + faktoren_str;
+				div.onclick = function() {
+					buy(id); //this.id funktioniert nit, weil this in dem fall da div is.. hmm. eh egal weil dynamisch per php erzeugt?
+				}
+				
+				document.getElementById('temp').appendChild(div);
+			}
+		}
+
+		buyables.push(newBuyable);
+		buyables[id].createme(); 
+		$('input').remove();      // <input type='button' value='make buyable' onclick=makebuyable(); />
+		
+	}
