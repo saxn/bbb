@@ -1,0 +1,23 @@
+verbraucht: {
+				1:220,
+				8:40
+			},
+			change: {
+				1:20
+			},
+			effekte: function() {
+				
+				var obj = this.verbraucht;
+				Object.keys(obj).forEach(function(key) {
+					console.log(key, obj[key]);
+					
+				});
+				
+				var obj = this.change;
+				Object.keys(obj).forEach(function(key) {
+					console.log(key, obj[key]);
+					
+				});
+				
+			
+	objekte im objekt.
